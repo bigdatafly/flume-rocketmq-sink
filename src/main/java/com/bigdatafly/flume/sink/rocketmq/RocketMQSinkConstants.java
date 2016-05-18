@@ -12,10 +12,6 @@ public class RocketMQSinkConstants {
 	  //public static final String TIMESTAMP = "timestamp";
 	public static final String BATCH_SIZE = "batchSize";
 	  //public static final String BATCH_DURATION_MS = "batchDurationMillis";
-	
-
-
-	 
     public static final String SEND_MSG_TIME_OUT = "sendtimeout";
 	public static final String CLIENT_TYPE = "clienttype";
 	public static final String SEVR_ADDR = "sevraddr";

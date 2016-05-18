@@ -45,6 +45,13 @@
 	    <version>1.6.0</version>
 	</dependency>
 	
+	<!-- http://mvnrepository.com/artifact/org.apache.flume.flume-ng-sinks/flume-ng-kafka-sink -->
+	<dependency>
+	    <groupId>org.apache.flume.flume-ng-sinks</groupId>
+	    <artifactId>flume-ng-kafka-sink</artifactId>
+	    <version>1.6.0</version>
+	</dependency>
+	
     <!-- http://mvnrepository.com/artifact/org.apache.zookeeper/zookeeper -->
 	<dependency>
 	    <groupId>org.apache.zookeeper</groupId>
