@@ -14,6 +14,7 @@ import org.apache.flume.Transaction;
 import org.apache.flume.annotations.InterfaceAudience;
 import org.apache.flume.annotations.InterfaceStability;
 import org.apache.flume.conf.Configurable;
+import org.apache.flume.event.EventHelper;
 import org.apache.flume.instrumentation.SinkCounter;
 import org.apache.flume.sink.AbstractSink;
 import org.slf4j.Logger;
@@ -22,6 +23,7 @@ import org.slf4j.LoggerFactory;
 import com.alibaba.rocketmq.client.exception.MQClientException;
 import com.alibaba.rocketmq.client.producer.DefaultMQProducer;
 import com.alibaba.rocketmq.client.producer.SendCallback;
+import com.alibaba.rocketmq.client.producer.SendResult;
 import com.alibaba.rocketmq.client.producer.TransactionMQProducer;
 import com.alibaba.rocketmq.common.MixAll;
 import com.alibaba.rocketmq.common.ServiceState;
@@ -54,6 +56,8 @@ public class RocketMQSink extends AbstractSink implements Configurable {
     private long timeout;
     
     private int batchSize;
+    
+    //---------------------------------------//
     
     private String clientClass;
     
@@ -129,15 +133,16 @@ public class RocketMQSink extends AbstractSink implements Configurable {
     	if(RocketMQSinkConstants.DEFAULT_TOPIC.equals(tempTopic))
     		topic = getHeader(headers,RocketMQSinkConstants.PRODUCER_TOPIC,tempTopic);
     	String eventkeys = getHeader(headers,RocketMQSinkConstants.MESSAGE_KEYS,keys);
+    	String eventtags = getHeader(headers,RocketMQSinkConstants.MESSAGE_TAGS,tags);
     	byte[] body = event.getBody();
     	
         if (logger.isDebugEnabled()) {
-            logger.debug("{Event} " + topic + " : " + eventkeys + " : "
+            logger.debug("{Event} " + topic + " : " + eventkeys + " : "+ eventtags + " : "
               + new String(body));
             
           }
     	
-    	Message msg = new Message(topic,tags,keys,body);
+    	Message msg = new Message(topic,eventtags,eventkeys,body);
 
     	return msg;
     }
@@ -184,8 +189,15 @@ public class RocketMQSink extends AbstractSink implements Configurable {
 			       
 				
 				for(int i=0;i<size;i++){
-					Message msg = serializer(batch.get(i));
-					client.send(msg,sendCallback, timeout);
+					
+					Event sndEvent = batch.get(i);
+					Message msg = serializer(sndEvent);
+					//client.send(msg,sendCallback, timeout);
+					SendResult sndResult = client.send(msg, timeout);
+					if (logger.isDebugEnabled()) {
+			            logger.debug("event { " + EventHelper.dumpEvent(sndEvent) + "} : " + msg + " : "
+			              + sndResult);
+					}
 				}
 			    
 			}
@@ -230,6 +242,7 @@ public class RocketMQSink extends AbstractSink implements Configurable {
 		this.producerGroup = context.getString(RocketMQSinkConstants.PRODUCER_GROUP, MixAll.DEFAULT_PRODUCER_GROUP);
 		this.topic = context.getString(RocketMQSinkConstants.PRODUCER_TOPIC, RocketMQSinkConstants.DEFAULT_TOPIC);
 		this.keys = context.getString(RocketMQSinkConstants.MESSAGE_KEYS, RocketMQSinkConstants.DEFAULT_MESSAGE_KEYS);
+		this.tags = context.getString(RocketMQSinkConstants.MESSAGE_TAGS, RocketMQSinkConstants.DEFAULT_MESSAGE_TAGS);
 		this.clientClass = context.getString(RocketMQSinkConstants.CLIENT_TYPE, RocketMQSinkConstants.DEFAULT_CLIENT_TYPE);
 		this.namesrvAddr = context.getString(RocketMQSinkConstants.SEVR_ADDR, RocketMQSinkConstants.DEFAULT_SEVR_ADDR);
 		this.isTransaction = context.getBoolean(RocketMQSinkConstants.TRANSCATION_ENABLED, RocketMQSinkConstants.DEFAULT_TRANSCATION_ENABLED);
