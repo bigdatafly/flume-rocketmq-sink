@@ -32,6 +32,13 @@
 	    <version>1.6.0</version>
 	</dependency>
 	
+	<!-- http://mvnrepository.com/artifact/com.codahale.metrics/metrics-core -->
+	<dependency>
+	    <groupId>com.codahale.metrics</groupId>
+	    <artifactId>metrics-core</artifactId>
+	    <version>3.0.2</version>
+	</dependency>
+	
 	<!-- http://mvnrepository.com/artifact/org.apache.flume.flume-ng-sources/flume-kafka-source -->
 	<dependency>
 	    <groupId>org.apache.flume.flume-ng-sources</groupId>
