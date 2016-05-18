@@ -32,7 +32,7 @@ public class RocketMQSinkConstants {
 	//public static final int DEFAULT_BATCH_DURATION = 1000;
 
 	public static final boolean DEFAULT_TRANSCATION_ENABLED =  false;
-	public static final String MESSAGE_KEYS = "msgkey";
+	public static final String MESSAGE_KEYS = "key";
 	public static final String DEFAULT_MESSAGE_KEYS = "";
 	  
 }

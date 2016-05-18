@@ -108,15 +108,15 @@ public class RocketMQSink extends AbstractSink implements Configurable {
 		}
     }
     
-    protected String getTopic(Map<String,String> headers,String defaultTopic){
+    protected String getHeader(Map<String,String> headers,String key,String defaultValue){
     	
     	if(headers!=null &&
     			!headers.isEmpty() && 
-    			headers.containsKey(RocketMQSinkConstants.PRODUCER_TOPIC)){
-    		return headers.get(RocketMQSinkConstants.PRODUCER_TOPIC);
+    			headers.containsKey(key)){
+    		return headers.get(key);
     	}
     	
-    	return defaultTopic;
+    	return defaultValue;
     }
     
     protected Message serializer(Event event){
@@ -125,8 +125,15 @@ public class RocketMQSink extends AbstractSink implements Configurable {
     	String tempTopic = topic;
     	
     	if(RocketMQSinkConstants.DEFAULT_TOPIC.equals(tempTopic))
-    		topic = getTopic(headers,tempTopic);
+    		topic = getHeader(headers,RocketMQSinkConstants.PRODUCER_TOPIC,tempTopic);
+    	String eventkeys = getHeader(headers,RocketMQSinkConstants.MESSAGE_KEYS,keys);
     	byte[] body = event.getBody();
+    	
+        if (logger.isDebugEnabled()) {
+            logger.debug("{Event} " + topic + " : " + eventkeys + " : "
+              + new String(body));
+            
+          }
     	
     	Message msg = new Message(topic,tags,keys,body);
 
@@ -243,7 +250,16 @@ public class RocketMQSink extends AbstractSink implements Configurable {
 					}	
 				}		    	
 		    }));
-		 
+		
+		if(topic.equals(RocketMQSinkConstants.DEFAULT_TOPIC)) {
+		      logger.warn("The Property 'topic' is not set. " +
+		        "Using the default topic name: " +
+		        RocketMQSinkConstants.DEFAULT_TOPIC);
+		    } else {
+		      logger.info("Using the static topic: " + topic +
+		        " this may be over-ridden by event headers");
+		  }
+		
 		 if(sinkCounter == null)
 			 sinkCounter = new SinkCounter(getName());
 			
@@ -275,6 +291,8 @@ public class RocketMQSink extends AbstractSink implements Configurable {
 		client = null;
 		
 		sinkCounter.stop();
+		
+		logger.info("Kafka Sink {} stopped. Metrics: {}", getName(), sinkCounter);
 		super.stop();
 	}
 
