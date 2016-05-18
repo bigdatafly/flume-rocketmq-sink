@@ -81,11 +81,13 @@ public class RocketMQSink extends AbstractSink implements Configurable {
 		try{
 			startRocketMQ();
 		}catch(MQClientException ex ){
-			
+			state = false;
+			if(logger.isDebugEnabled())
+				logger.debug("RocketMQ start failed",ex);
 		}
 		
 		ServiceState serviceState = getServiceState();
-		Preconditions.checkState(serviceState == ServiceState.RUNNING, "No Client configured");
+		Preconditions.checkState(serviceState == ServiceState.RUNNING, "Client start failed");
 		
 		sinkCounter.start();
 		super.start();
