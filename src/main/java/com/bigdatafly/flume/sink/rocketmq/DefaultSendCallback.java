@@ -13,13 +13,6 @@ import com.alibaba.rocketmq.client.producer.SendResult;
 public class DefaultSendCallback implements SendCallback{
 
 	 
-	/**
-	 * 
-	 */
-	public DefaultSendCallback() {
-		// TODO Auto-generated constructor stub
-	}
-
 	public void onSuccess(SendResult sendResult) {
 		
 		
