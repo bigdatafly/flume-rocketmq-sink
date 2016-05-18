@@ -9,10 +9,8 @@ package com.bigdatafly.flume.sink.rocketmq;
  */
 public class RocketMQSinkConstants {
 
-	  
-	  //public static final String KEY = "key";
 	  //public static final String TIMESTAMP = "timestamp";
-	  //public static final String BATCH_SIZE = "batchSize";
+	public static final String BATCH_SIZE = "batchSize";
 	  //public static final String BATCH_DURATION_MS = "batchDurationMillis";
 	
 
@@ -34,11 +32,11 @@ public class RocketMQSinkConstants {
 	public static final long   DEFAULT_TIMEOUT = 10;
 	public static final int	   DEFAULT_SEND_FAILED_RETRY_TIMES = 10;
 	
-	//public static final int DEFAULT_BATCH_SIZE = 1000;
+	public static final int DEFAULT_BATCH_SIZE = 1000;
 	//public static final int DEFAULT_BATCH_DURATION = 1000;
 
 	public static final boolean DEFAULT_TRANSCATION_ENABLED =  false;
-	public static String MESSAGE_KEYS;
-	public static String DEFAULT_MESSAGE_KEYS;
+	public static final String MESSAGE_KEYS = "msgkey";
+	public static final String DEFAULT_MESSAGE_KEYS = "";
 	  
 }
