@@ -6,11 +6,11 @@ import com.alibaba.rocketmq.common.message.Message;
 public class Producer {
 	public static void main(String[] args){
 		DefaultMQProducer producer = new DefaultMQProducer("Producer");
-		producer.setNamesrvAddr("VM-G101-06-67:9876");
+		producer.setNamesrvAddr("172.27.101.67:9876");
 		try {
 			producer.start();
 			
-			Message msg = new Message("PushTopic", 
+			Message msg = new Message("Topic4", 
 					"push", 
 					"1", 
 					"Just for test.".getBytes());
@@ -19,7 +19,7 @@ public class Producer {
 			System.out.println("id:" + result.getMsgId() +
 					" result:" + result.getSendStatus());
 			
-			msg = new Message("PushTopic", 
+			msg = new Message("Topic4", 
 					"push", 
 					"2", 
 					"Just for test.".getBytes());
@@ -28,7 +28,7 @@ public class Producer {
 			System.out.println("id:" + result.getMsgId() +
 					" result:" + result.getSendStatus());
 			
-			msg = new Message("PullTopic", 
+			msg = new Message("Topic4", 
 					"pull", 
 					"1", 
 					"Just for test.".getBytes());
