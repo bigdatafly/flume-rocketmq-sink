@@ -1,0 +1,6 @@
+{
+  "name": "Flume-rocketmq-sink",
+  "tagline": "",
+  "body": "## flume-rocketmq-sink\r\nThe project of flume-rocketmq-sink is a log collector which  \r\nmainly after the log summary, sent to the RocketMQ",
+  "note": "Don't delete this file! It's used internally to help with page regeneration."
+}
